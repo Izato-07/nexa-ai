@@ -1,6 +1,6 @@
 
 import streamlit as st
-import ollama
+from groq import Groq, APIError
 
 st.set_page_config(
     page_title="Nexa AI",
@@ -9,19 +9,18 @@ st.set_page_config(
 )
 
 st.title("🤖 Nexa AI")
-st.caption("Your personal AI assistant · Local mode")
+st.caption("Your personal AI assistant")
+
+try:
+    api_key = st.secrets["GROQ_API_KEY"]
+except Exception:
+    api_key = ""
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
 with st.sidebar:
     st.header("Settings")
-
-    model = st.selectbox(
-        "AI Model",
-        ["qwen2.5:3b"],
-        key="model_selector"
-    )
 
     system_prompt = st.text_area(
         "Custom instructions",
@@ -30,11 +29,11 @@ with st.sidebar:
         key="system_instructions"
     )
 
-    if st.button("Clear conversation", key="clear_chat"):
+    if st.button("Clear conversation"):
         st.session_state.messages = []
         st.rerun()
 
-st.caption("Runs locally on your computer. No OpenAI API key required.")
+st.caption("Powered by Groq")
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
@@ -50,32 +49,40 @@ if user_input:
     with st.chat_message("user"):
         st.markdown(user_input)
 
-    with st.chat_message("assistant"):
-        with st.spinner("Nexa AI is thinking..."):
-            try:
-                history = st.session_state.messages[-12:]
+    if not api_key:
+        st.error("Groq API key is missing. Add it in Streamlit Secrets.")
+    else:
+        with st.chat_message("assistant"):
+            with st.spinner("Nexa AI is thinking..."):
+                try:
+                    client = Groq(api_key=api_key)
 
-                response = ollama.chat(
-                    model=model,
-                    messages=[
+                    response = client.chat.completions.create(
+                        model="openai/gpt-oss-120b",
+                        messages=[
+                            {
+                                "role": "system",
+                                "content": system_prompt
+                            },
+                            *st.session_state.messages[-12:]
+                        ],
+                        max_tokens=700
+                    )
+
+                    answer = (
+                        response.choices[0].message.content
+                        or "The model returned an empty response."
+                    )
+
+                    st.markdown(answer)
+                    st.session_state.messages.append(
                         {
-                            "role": "system",
-                            "content": system_prompt
-                        },
-                        *history
-                    ]
-                )
+                            "role": "assistant",
+                            "content": answer
+                        }
+                    )
 
-                answer = response["message"]["content"]
-                st.markdown(answer)
-
-                st.session_state.messages.append(
-                    {"role": "assistant", "content": answer}
-                )
-
-            except Exception as exc:
-                st.error(
-                    "Could not connect to Ollama. Make sure Ollama "
-                    "is running and qwen2.5:3b is installed."
-                )
-                st.caption(f"Technical details: {exc}")
+                except APIError as exc:
+                    st.error(f"Groq API error: {exc}")
+                except Exception as exc:
+                    st.error(f"Something went wrong: {exc}")
