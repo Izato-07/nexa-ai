@@ -1,98 +1,95 @@
 # 🤖 Nexa AI
 
-Nexa AI is a personal AI assistant built with Python, Streamlit, and Ollama. It uses a locally running language model to generate responses without requiring a paid cloud API.
+**Nexa AI** is a web-based AI assistant built with Python and Streamlit, powered by the Groq API. It provides a simple, interactive chat interface where users can ask questions and receive AI-generated responses.
 
-## Features
+## ✨ Features
 
-- Interactive chat interface
-- Local AI inference using Qwen 2.5 3B
-- Custom system instructions
-- Conversation history
-- Clear conversation option
+- 💬 Interactive AI chat interface
+- ⚡ Fast AI responses powered by Groq
+- 🧠 Customizable system instructions
+- 💭 Conversation context for follow-up questions
+- 🗑️ Clear conversation functionality
+- 🔐 API key management using Streamlit Secrets
+- 🌐 Web-based interface accessible through a browser
 
-## Technologies Used
+## 🛠️ Tech Stack
 
-- Python
-- Streamlit
-- Ollama
-- Qwen 2.5 3B
+- **Language:** Python
+- **Frontend and UI:** Streamlit
+- **AI Provider:** Groq API
+- **AI Model:** OpenAI GPT-OSS 120B (`openai/gpt-oss-120b`)
 
-## Prerequisites
+## 📁 Project Structure
 
-- Python 3.10 or newer
-- Ollama installed
-- Qwen 2.5 3B model downloaded
+```text
+nexa-ai/
+├── app.py
+├── requirements.txt
+├── README.md
+├── .gitignore
+└── .streamlit/
+    └── secrets.toml
+```
 
-## Run Locally
+**Note:** The `.streamlit/secrets.toml` file stores your local API key and must not be uploaded to GitHub.
 
-1. Install Ollama from https://ollama.com/download
-2. Download the model:
+## ⚙️ Setup and Installation
 
-   `ollama run qwen2.5:3b`
+### 1. Clone the repository
 
-3. Install Python dependencies:
+```bash
+git clone https://github.com/Izato-07/nexa-ai.git
+cd nexa-ai
+```
 
-   `pip install -r requirements.txt`
+### 2. Install dependencies
 
-4. Start Nexa AI:
+```bash
+python -m pip install -r requirements.txt
+```
 
-   `python -m streamlit run app.py`
+### 3. Configure your API key
 
-5. Open the local URL displayed in your terminal.
+Create a `.streamlit` folder in the project directory, then create a file named `secrets.toml` inside it.
 
-## Privacy
+Add the following line:
 
-Prompts are processed by the local Ollama model. No OpenAI API key is required for this version.
+```toml
+GROQ_API_KEY = "your_groq_api_key_here"
+```
 
-## Project Purpose
+Replace the placeholder with your own API key from the [Groq Console](https://console.groq.com/keys).
 
-Created as a learning project to explore Python, AI integration, and Streamlit application development.
-# 🤖 Nexa AI
+**Security:** Never share your API key or commit your `secrets.toml` file to a public repository.
 
-Nexa AI is a personal AI assistant built with Python, Streamlit, and Ollama. It uses a locally running language model to generate responses without requiring a paid cloud API.
+### 4. Run the application
 
-## Features
+```bash
+python -m streamlit run app.py
+```
 
-- Interactive chat interface
-- Local AI inference using Qwen 2.5 3B
-- Custom system instructions
-- Conversation history
-- Clear conversation option
+Your browser will open the Nexa AI application.
 
-## Technologies Used
+## ☁️ Deployment
 
-- Python
-- Streamlit
-- Ollama
-- Qwen 2.5 3B
+Nexa AI can be deployed using [Streamlit Community Cloud](https://share.streamlit.io/).
 
-## Prerequisites
+1. Connect your GitHub repository.
+2. Select `app.py` as the application entry point.
+3. Add `GROQ_API_KEY` to the app's Secrets settings.
+4. Deploy the application.
 
-- Python 3.10 or newer
-- Ollama installed
-- Qwen 2.5 3B model downloaded
+## 🔒 Security
 
-## Run Locally
+- API keys are read from Streamlit Secrets rather than hardcoded into the application.
+- Never commit secret keys or credentials to GitHub.
+- Public deployments should implement suitable access controls and usage safeguards.
 
-1. Install Ollama from https://ollama.com/download
-2. Download the model:
+## 👨‍💻 Developer
 
-   `ollama run qwen2.5:3b`
+**Project:** Nexa AI  
+**GitHub:** [Izato-07/nexa-ai](https://github.com/Izato-07/nexa-ai)
 
-3. Install Python dependencies:
+## 📜 Disclaimer
 
-   `pip install -r requirements.txt`
-
-4. Start Nexa AI:
-
-   `python -m streamlit run app.py`
-
-5. Open the local URL displayed in your terminal.
-
-## Privacy
-
-Prompts are processed by the local Ollama model. No OpenAI API key is required for this version.
-
-## Project Purpose
-
-Created as a learning project to explore Python, AI integration, and Streamlit application development.
+Nexa AI is an educational project developed for learning and internship purposes. Its functionality depends on the availability and usage limits of the Groq API.
